@@ -1,5 +1,15 @@
 #!/bin/sh
 
+#add user accounts and public keys
+useradd -g wheel ryan; useradd -g wheel jun
+
+sudo mkdir .ssh && sudo chown ryan .ssh && sudo chmod 700 .ssh && sudo touch .ssh/authorized_keys && sudo chown ryan .ssh/authorized_keys && sudo chmod 600 .ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMx78nvqVe1nnln04c9KCZM0gtV5xTyxrtvFkoxL/NA9hTC9zUYNC4Tw/WDHV0JY0gmunvNvEEfjEjkRsjaL4xs= ryan@webgap.io' >> .ssh/authorized_keys
+sudo mkdir .ssh && sudo chown jun .ssh && sudo chmod 700 .ssh && sudo touch .ssh/authorized_keys && sudo chown jun .ssh/authorized_keys && sudo chmod 600 .ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOitLpmSRgHqeucnSFCJLoEnSJVZzBBAxnRJ6nXqWBouctAKNK85y2pC98zJVMUVgC292vlOSF6RBUbGkmrjaGg= jun@webgap.io' >> .ssh/authorized_keys
+
+#passwordless sudo for wheel
+
+
+#ssh hardening
 sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 sed -i 's/#MaxAuthTries 6/MaxAuthTries 4/' /etc/ssh/sshd_config
 sed -i 's/#MaxSessions 10/MaxSessions 10/' /etc/ssh/sshd_config
@@ -17,10 +27,6 @@ sed -i '28 i Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128
 sed -i '29 i MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com' /etc/ssh/sshd_config
 systemctl restart sshd
 
-echo -e -n "\e[0;33mWhich user account password do you want to delete?\033[0m "
-read account
-passwd -d $account
-
-echo -e -n "\e[0;33mWhich user account password do you want to delete?\033[0m "
-read account
-passwd -d $account
+#prohibit null password logins via pam
+sed -i 's/auth        sufficient    pam_unix.so try_first_pass nullok/auth        sufficient    pam_unix.so try_first_pass/' /etc/pam.d/system-auth
+sed -i 's/password    sufficient    pam_unix.so try_first_pass use_authtok nullok sha512 shadow/password    sufficient    pam_unix.so try_first_pass use_authtok sha512 shadow/' /etc/pam.d/system-auth
