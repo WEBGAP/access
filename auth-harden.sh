@@ -3,8 +3,8 @@
 #add user accounts and public keys
 useradd -g wheel ryan; useradd -g wheel jun
 
-sudo mkdir .ssh && sudo chown ryan .ssh && sudo chmod 700 .ssh && sudo touch .ssh/authorized_keys && sudo chown ryan .ssh/authorized_keys && sudo chmod 600 .ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMx78nvqVe1nnln04c9KCZM0gtV5xTyxrtvFkoxL/NA9hTC9zUYNC4Tw/WDHV0JY0gmunvNvEEfjEjkRsjaL4xs= ryan@webgap.io' >> .ssh/authorized_keys
-sudo mkdir .ssh && sudo chown jun .ssh && sudo chmod 700 .ssh && sudo touch .ssh/authorized_keys && sudo chown jun .ssh/authorized_keys && sudo chmod 600 .ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOitLpmSRgHqeucnSFCJLoEnSJVZzBBAxnRJ6nXqWBouctAKNK85y2pC98zJVMUVgC292vlOSF6RBUbGkmrjaGg= jun@webgap.io' >> .ssh/authorized_keys
+sudo mkdir /home/ryan/.ssh && sudo chown ryan /home/ryan/.ssh && sudo chmod 700 /home/ryan/.ssh && sudo touch /home/ryan/.ssh/authorized_keys && sudo chown ryan /home/ryan/.ssh/authorized_keys && sudo chmod 600 /home/ryan/.ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMx78nvqVe1nnln04c9KCZM0gtV5xTyxrtvFkoxL/NA9hTC9zUYNC4Tw/WDHV0JY0gmunvNvEEfjEjkRsjaL4xs= ryan@webgap.io' >> /home/ryan/.ssh/authorized_keys
+sudo mkdir /home/jun/.ssh && sudo chown jun /home/jun/.ssh && sudo chmod 700 /home/jun/.ssh && sudo touch /home/jun/.ssh/authorized_keys && sudo chown jun /home/jun/.ssh/authorized_keys && sudo chmod 600 /home/jun/.ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOitLpmSRgHqeucnSFCJLoEnSJVZzBBAxnRJ6nXqWBouctAKNK85y2pC98zJVMUVgC292vlOSF6RBUbGkmrjaGg= jun@webgap.io' >> /home/jun/.ssh/authorized_keys
 
 #passwordless sudo for wheel
 sed -i '110 s/#//' /etc/sudoers
