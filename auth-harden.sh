@@ -7,7 +7,7 @@ sudo mkdir .ssh && sudo chown ryan .ssh && sudo chmod 700 .ssh && sudo touch .ss
 sudo mkdir .ssh && sudo chown jun .ssh && sudo chmod 700 .ssh && sudo touch .ssh/authorized_keys && sudo chown jun .ssh/authorized_keys && sudo chmod 600 .ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOitLpmSRgHqeucnSFCJLoEnSJVZzBBAxnRJ6nXqWBouctAKNK85y2pC98zJVMUVgC292vlOSF6RBUbGkmrjaGg= jun@webgap.io' >> .ssh/authorized_keys
 
 #passwordless sudo for wheel
-sed -i '110 s/#//' visudo
+sed -i '110 s/#//' /etc/sudoers
 
 #ssh hardening
 sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
