@@ -11,6 +11,8 @@ osrelease=$(awk -F= '$1=="NAME" { print $2 ;}' /etc/os-release)
 
 if [ "$osrelease" == '"Ubuntu"' ]; then
 
+    apt update; apt -y upgrade
+
     useradd --create-home -g sudo ryan; useradd --create-home -g sudo jun
 
     mkdir /home/ryan/.ssh && sudo chown ryan /home/ryan/.ssh && sudo chmod 700 /home/ryan/.ssh && sudo touch /home/ryan/.ssh/authorized_keys && sudo chown ryan /home/ryan/.ssh/authorized_keys && sudo chmod 600 /home/ryan/.ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMx78nvqVe1nnln04c9KCZM0gtV5xTyxrtvFkoxL/NA9hTC9zUYNC4Tw/WDHV0JY0gmunvNvEEfjEjkRsjaL4xs= ryan@webgap.io' >> /home/ryan/.ssh/authorized_keys
