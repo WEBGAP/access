@@ -6,18 +6,21 @@ if [ $(id -u) != 0 ]; then
     exit 1
 fi
 
-#gets the operating system ID and saves as the variable osrelease
+#gets the operating system NAME and saves as the variable osrelease
 osrelease=$(awk -F= '$1=="NAME" { print $2 ;}' /etc/os-release)
 
 if [ "$osrelease" == '"Ubuntu"' ]; then
 
+    #avoids ssh server config file replacement after changes below
     apt update; apt -y upgrade
 
+    #creates users and home directories
     useradd --create-home -g sudo ryan; useradd --create-home -g sudo jun
 
     mkdir /home/ryan/.ssh && sudo chown ryan /home/ryan/.ssh && sudo chmod 700 /home/ryan/.ssh && sudo touch /home/ryan/.ssh/authorized_keys && sudo chown ryan /home/ryan/.ssh/authorized_keys && sudo chmod 600 /home/ryan/.ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMx78nvqVe1nnln04c9KCZM0gtV5xTyxrtvFkoxL/NA9hTC9zUYNC4Tw/WDHV0JY0gmunvNvEEfjEjkRsjaL4xs= ryan@webgap.io' >> /home/ryan/.ssh/authorized_keys
     mkdir /home/jun/.ssh && sudo chown jun /home/jun/.ssh && sudo chmod 700 /home/jun/.ssh && sudo touch /home/jun/.ssh/authorized_keys && sudo chown jun /home/jun/.ssh/authorized_keys && sudo chmod 600 /home/jun/.ssh/authorized_keys && sudo echo 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOitLpmSRgHqeucnSFCJLoEnSJVZzBBAxnRJ6nXqWBouctAKNK85y2pC98zJVMUVgC292vlOSF6RBUbGkmrjaGg= jun@webgap.io' >> /home/jun/.ssh/authorized_keys
 
+    #hardens the ssh server
     sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
     sed -i 's/#MaxAuthTries 6/MaxAuthTries 4/' /etc/ssh/sshd_config
     sed -i 's/#MaxSessions 10/MaxSessions 10/' /etc/ssh/sshd_config
@@ -35,11 +38,14 @@ if [ "$osrelease" == '"Ubuntu"' ]; then
     sed -i '29 i MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com' /etc/ssh/sshd_config
     systemctl restart sshd
 
+    #allows passwordless sudo
     sed -i '27 i %sudo ALL=(ALL:ALL) NOPASSWD:ALL' /etc/sudoers
 
+    #requires password for su of all accounts except root
     sed -i '$ a auth        sufficient    pam_unix.so try_first_pass/' /etc/pam.d/su
     sed -i '$ a password    sufficient    pam_unix.so try_first_pass use_authtok sha512 shadow/' /etc/pam.d/su
 
+    #deletes the root password
     passwd -d root
 
 else
