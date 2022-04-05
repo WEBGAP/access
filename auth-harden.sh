@@ -9,6 +9,14 @@ fi
 #gets the operating system NAME and saves as the variable osrelease
 osrelease=$(awk -F= '$1=="NAME" { print $2 ;}' /etc/os-release)
 
+#if the operating system ID isn't rocky nor centos the script exits after displaying a message
+if [ "$osrelease" != '"Rocky Linux"' ] && [ "$osrelease" != '"CentOS Linux"' ] && [ "$osrelease" != '"Ubuntu"' ]; then
+    echo "$(tput setaf 3)Please install on CentOS 7, Rocky 8, or Ubuntu 20.04 or newer. You are trying to install on $(tput bold)$osrelease.$(tput setaf 9)"
+
+    sleep 2
+    exit 1
+fi
+
 if [ "$osrelease" == '"Ubuntu"' ]; then
 
     #avoids ssh server config file replacement after changes below
