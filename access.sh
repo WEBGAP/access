@@ -88,6 +88,9 @@ else
     #delete root account password
     passwd -d root
 
+    #update packages
+    yum -y upgrade
+
     #prohibit null password logins via pam
     sed -i 's/auth        sufficient    pam_unix.so try_first_pass nullok/auth        sufficient    pam_unix.so try_first_pass/' /etc/pam.d/system-auth
     sed -i 's/password    sufficient    pam_unix.so try_first_pass use_authtok nullok sha512 shadow/password    sufficient    pam_unix.so try_first_pass use_authtok sha512 shadow/' /etc/pam.d/system-auth
